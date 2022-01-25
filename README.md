@@ -11,8 +11,8 @@ endpoint.
 Below diagram depicts the high level components assembled to solve this problem.
 
 **request processor service**
-is the spring boot Java Rest API that accepts the requests, integrates with **Redis cache**. All the accepted unique
-request ids by request processor instances are immediately sent over to redis cache. Requests to endpoint are forwarded
+is the spring boot Java Rest API that accepts the requests. All the accepted unique
+request ids by request processor instances are immediately sent over to **redis cache**. Requests to endpoint are forwarded
 asynchronously and response status is shared as an event to a kafka topic. for more details
 check `/request-processor/README.md`
 
