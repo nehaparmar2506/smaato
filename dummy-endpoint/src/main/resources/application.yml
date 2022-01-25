@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: dummy
+
+server:
+  port: 1000
+
+---
+#### DEV PROFILE ####
+spring:
+  profiles:
+    active: dev

@@ -3,8 +3,8 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/jmeter/pom.xml" />
         <option value="$PROJECT_DIR$/logger/pom.xml" />
+        <option value="$PROJECT_DIR$/dummy-endpoint/pom.xml" />
         <option value="$PROJECT_DIR$/event-listener/pom.xml" />
         <option value="$PROJECT_DIR$/request-processor/pom.xml" />
       </list>

@@ -1,12 +1,11 @@
 package com.smaato.requestprocessor.service;
 
 import com.smaato.requestprocessor.data.UniqueRequestsPerMinute;
-import com.smaato.requestprocessor.remote.RemoteCaller;
+import com.smaato.requestprocessor.remote.EndPointForwarderClient;
 import com.smaato.requestprocessor.repository.RedisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
@@ -21,11 +20,10 @@ public class RequestProcessor {
     @Autowired
     RedisRepository redisRepository;
 
-    @Autowired
-    RemoteCaller caller ;
+  @Autowired EndPointForwarderClient caller;
 
   public String processRequest(Integer id, String endPoint)
-          throws ExecutionException, InterruptedException, URISyntaxException {
+      throws ExecutionException, InterruptedException {
 
         Long currentMinute = getCurrentMinute();
     Optional<UniqueRequestsPerMinute> optRequestsPerMin = redisRepository.findById(currentMinute);
@@ -45,7 +43,8 @@ public class RequestProcessor {
 
     redisRepository.save(uniqueRequestsPerMinute);
 
-    if (endPoint != null) caller.callEndpoint(endPoint, currentMinute, uniqueRequestsPerMinute);
+    if (endPoint != null)
+      caller.callEndpointAndSendEvent(endPoint, currentMinute, uniqueRequestsPerMinute);
 
         return "OK";
     }

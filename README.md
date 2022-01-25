@@ -36,9 +36,17 @@ started with following steps:
 2. run command -  `docker-compose build`
 3. run command - `docker-compose up`
 4. application can be accessed on `localhost:9090/api/smaato/accept?id=anyIntegerId` or `localhost:
-   9090/api/smaato/accept?id=anyId&endPoint=any-end-point-location`
+   9090/api/smaato/accept?id=anyId&endPoint=end-point`
+   here end-point should accept body with below format :
+   `{"uniqueRequestsCount":2}`
+   `curl --location --request POST 'http://192.168.1.5:1000/dummy/statistics' \
+   --header 'Content-Type: application/json' \
+   --data-raw '{"uniqueRequestsCount":2}'`
+   For testing purpose, there is also a dummy-endpoint rest api which accepts such post requests, which can be started locally to test.
+   refer `/dummy-endpoint/README.md` for instructions on how to use it
+
 5. Log file with generated count and response status can be accessed from container cli(/var/log of respective
-   container) or via docker UI dashboard. Accessing from dashboard (docker dashboard -> volumes -> smaato ) :
+   container) or via docker UI dashboard. Accessing from dashboard (docker dashboard -> volumes -> smaato_logger-volume ) under data tab :
     - For Unique request count access log file **accepted-request-count-logs.txt**
     - File name For Response status - **response-status-logs.txt**
     

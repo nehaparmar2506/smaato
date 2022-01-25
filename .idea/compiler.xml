@@ -9,21 +9,21 @@
         <outputRelativeToContentRoot value="true" />
         <module name="event-listener" />
         <module name="request-processor" />
-        <module name="jmeter" />
         <module name="logger" />
+        <module name="dummy-endpoint" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="dummy-endpoint" target="8" />
       <module name="event-listener" target="1.8" />
-      <module name="jmeter" target="1.8" />
       <module name="logger" target="8" />
       <module name="request-processor" target="8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="dummy-endpoint" options="-parameters" />
       <module name="event-listener" options="-parameters" />
-      <module name="jmeter" options="-parameters" />
       <module name="logger" options="-parameters" />
       <module name="request-processor" options="-parameters" />
     </option>
