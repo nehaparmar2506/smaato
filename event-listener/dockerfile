@@ -1,0 +1,9 @@
+FROM openjdk:8-jdk-alpine as builder
+RUN mkdir -p /event-listener/source
+COPY . /event-listener/source
+WORKDIR /event-listener/source
+RUN ./mvnw clean package -DskipTests
+
+FROM builder
+COPY --from=builder /event-listener/source/target/*.jar /event-listener/event-listener.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-jar", "/event-listener/event-listener.jar"]

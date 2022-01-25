@@ -1,0 +1,9 @@
+FROM openjdk:8-jdk-alpine as builder
+RUN mkdir -p /request-processor/source
+COPY . /request-processor/source
+WORKDIR /request-processor/source
+RUN ./mvnw clean package -DskipTests
+
+FROM builder
+COPY --from=builder /request-processor/source/target/*.jar /request-processor/request-processor.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-jar", "/request-processor/request-processor.jar"]

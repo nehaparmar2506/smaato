@@ -1,0 +1,116 @@
+version: '3.4'
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+     - exchange_network
+    depends_on:
+      - request-processor1
+      - request-processor2
+      - redis
+  kafka:
+      image: wurstmeister/kafka
+      ports:
+        - "9092:9092"
+      environment:
+        KAFKA_ADVERTISED_HOST_NAME: kafka
+        KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+        KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      networks:
+        - exchange_network
+      depends_on:
+        - request-processor1
+        - request-processor2
+        - redis
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    networks:
+      exchange_network:
+        ipv4_address: 10.5.0.4
+  request-processor1:
+    restart: on-failure
+    build:
+      context: ./request-processor/
+      dockerfile: Dockerfile
+    environment:
+      - REDIS_HOST=10.5.0.4
+      - SPRING_KAFKA_BOOTSTRAPSERVERS=kafka:9092
+    depends_on:
+      - redis
+    networks:
+      exchange_network:
+        ipv4_address: 10.5.0.5
+  request-processor2:
+    restart: on-failure
+    build:
+      context: ./request-processor/
+      dockerfile: Dockerfile
+    environment:
+      - REDIS_HOST=10.5.0.4
+      - SPRING_KAFKA_BOOTSTRAPSERVERS=kafka:9092
+    depends_on:
+      - redis
+    networks:
+      exchange_network:
+        ipv4_address: 10.5.0.6
+  nginx:
+    build:
+      context: ./ngnix/
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090"
+    environment:
+      - REDIS_HOST=10.5.0.4
+    depends_on:
+      - request-processor1
+      - request-processor2
+      - redis
+    networks:
+      - exchange_network
+  logger:
+    restart: on-failure
+    build:
+      context: ./logger/
+      dockerfile: Dockerfile
+    environment:
+      - REDIS_HOST=10.5.0.4
+    depends_on:
+      - request-processor1
+      - request-processor2
+    volumes:
+      - logger-volume:/var/log
+    networks:
+      exchange_network:
+        ipv4_address: 10.5.0.10
+  event-listner:
+    restart: on-failure
+    build:
+      context: ./event-listener/
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_KAFKA_BOOTSTRAPSERVERS=kafka:9092
+    depends_on:
+      - request-processor1
+      - request-processor2
+    networks:
+      exchange_network:
+        ipv4_address: 10.5.0.11
+    volumes:
+      - logger-volume:/var/log
+
+networks:
+  exchange_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/20
+          gateway: 10.5.0.1
+
+volumes:
+  logger-volume:
+    external: false

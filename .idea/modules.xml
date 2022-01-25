@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/event-listener/event-listener.iml" filepath="$PROJECT_DIR$/event-listener/event-listener.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jmeter/jmeter.iml" filepath="$PROJECT_DIR$/jmeter/jmeter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logger/logger.iml" filepath="$PROJECT_DIR$/logger/logger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/request-processor/request-processor.iml" filepath="$PROJECT_DIR$/request-processor/request-processor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/smaato.iml" filepath="$PROJECT_DIR$/.idea/smaato.iml" />
+    </modules>
+  </component>
+</project>

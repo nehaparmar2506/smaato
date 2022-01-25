@@ -1,0 +1,10 @@
+
+FROM openjdk:8-jdk-alpine as builder
+RUN mkdir -p /logger/source
+COPY . /logger/source
+WORKDIR /logger/source
+RUN ./mvnw clean package -DskipTests
+
+FROM builder
+COPY --from=builder /logger/source/target/*.jar /logger/logger.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-jar", "/logger/logger.jar"]

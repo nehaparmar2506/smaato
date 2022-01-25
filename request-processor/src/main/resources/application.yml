@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: counter
+
+  jackson:
+    default-property-inclusion: NON_NULL
+    serialization:
+      write_dates_as_timestamps: false
+    mapper:
+      ACCEPT_CASE_INSENSITIVE_ENUMS: true
+  cache:
+    type: redis
+    redis:
+      key-prefix:
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: 6379
+
+
+debug: false
+
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: application/javascript,application/json,application/xml,text/html,text/xml,text/css,text/plain
+    min-response-size: 1024
+
+
+---
+#### DEV PROFILE ####
+spring:
+  profiles:
+    active: dev
+
+
+kafka:
+  topic:
+    name: response-status
+    no-of-partitions: 2
+    replication-factor: 1
